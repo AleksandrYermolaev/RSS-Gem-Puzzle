@@ -1,0 +1,21 @@
+.wrapper {
+	border: 1px solid black;
+	@include go-adaptive('width', 600, 280);
+	@include go-adaptive('height', 600, 280);
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	.field {
+		border: 1px solid red;
+		position: relative;
+		@include go-adaptive('width', 400, 280);
+		@include go-adaptive('height', 400, 280);
+		.domino {
+			border: 1px solid green;
+			position: absolute;
+			@include go-adaptive('width', 100, 70);
+			@include go-adaptive('height', 100, 70);
+		}
+	}
+}

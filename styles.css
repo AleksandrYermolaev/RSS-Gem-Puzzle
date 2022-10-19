@@ -1,0 +1,51 @@
+.wrapper {
+  border: 1px solid black;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media (max-width: 1600px) {
+  .wrapper {
+    width: calc(280px + 320 * ((100vw - 320px) / (1600 - 320)));
+  }
+}
+@media (max-width: 1600px) {
+  .wrapper {
+    height: calc(280px + 320 * ((100vw - 320px) / (1600 - 320)));
+  }
+}
+.wrapper .field {
+  border: 1px solid red;
+  position: relative;
+  width: 400px;
+  height: 400px;
+}
+@media (max-width: 1600px) {
+  .wrapper .field {
+    width: calc(280px + 120 * ((100vw - 320px) / (1600 - 320)));
+  }
+}
+@media (max-width: 1600px) {
+  .wrapper .field {
+    height: calc(280px + 120 * ((100vw - 320px) / (1600 - 320)));
+  }
+}
+.wrapper .field .domino {
+  border: 1px solid green;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
+@media (max-width: 1600px) {
+  .wrapper .field .domino {
+    width: calc(70px + 30 * ((100vw - 320px) / (1600 - 320)));
+  }
+}
+@media (max-width: 1600px) {
+  .wrapper .field .domino {
+    height: calc(70px + 30 * ((100vw - 320px) / (1600 - 320)));
+  }
+}/*# sourceMappingURL=styles.css.map */
