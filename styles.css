@@ -46,12 +46,7 @@
   border-radius: 10px;
   background-color: rgb(244, 175, 72);
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 60px;
   color: rgb(103, 62, 16);
   cursor: pointer;
-}
-@media (max-width: 1600px) {
-  .wrapper .field .domino {
-    font-size: calc(38px + 22 * ((100vw - 320px) / (1600 - 320)));
-  }
+  transition: all 0.3s;
 }/*# sourceMappingURL=styles.css.map */
