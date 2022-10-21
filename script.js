@@ -13,10 +13,10 @@ let isReady = true;
 for (let i = 1; i < fieldSize * fieldSize; i++) {
  	numbers.push(i);
 }
-sortNumbers(numbers);
-initGame();
 
-dominos.push(dominoNull);
+initGame();
+canSolve();
+
 window.addEventListener('resize', () => {
 	field.innerHTML='';
 	dominoSize = field.clientWidth / fieldSize;
@@ -28,6 +28,7 @@ function sortNumbers(arr) {
 }
 
 function initGame() {
+	sortNumbers(numbers);
 	for (let i = 0; i < fieldSize * fieldSize - 1; i++) {
 		const domino = document.createElement('div');
 		const positionLeft = i % fieldSize;
@@ -70,7 +71,7 @@ function initGame() {
 		domino.addEventListener('transitionend', () => isReady = true);
 		field.append(domino);
 	}
-	
+	dominos.push(dominoNull);
 }
 
 function moveDominos(index) {
@@ -111,18 +112,18 @@ function canSolve() {
 	let count = fieldSize;
 	const result = dominos.slice();
 	result.sort((a, b) => a.positionTop + a.positionLeft - b.positionTop - b.positionLeft).sort((a, b) => a.positionTop - b.positionTop);
-	console.log(result);
+	
 	for (let i = 0; i < result.length - 1; i++) {
 		for (let j = i + 1; j < result.length - 1; j++) {
 			if (result[i].number > result[j].number) count++;
 		}
 	}
-	console.log(count);
+	
 	if (count % 2 !== 0) {
 		field.innerHTML = '';
 		dominos = [];
 		initGame();
-		
+		canSolve();
 	}
 	
-} canSolve();
+} 

@@ -11,9 +11,11 @@
 		position: relative;
 		@include go-adaptive('width', 400, 280);
 		@include go-adaptive('height', 400, 280);
-		border: 5px solid $color-field-border;
+		border: 10px solid;
+		border-image: url('/assets/images/border-image-min.jpg') 700;
+		
 		border-radius: 10px;
-		background-color: $color-field;
+		background: url('/assets/images/background-min.jpg') center/50%;
 
 		.domino {
 			position: absolute;
