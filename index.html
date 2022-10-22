@@ -10,13 +10,37 @@
 <body>
 	<div class="wrapper">
 		<div class="controls">
-
+			<h1 class="header">Gem Puzzle</h1>
+			<div class="buttons">
+				<button class="button start">Shuffle and start</button>
+				<button class="button pause" disabled>Pause game</button>
+				<button class="button save" disabled>Save</button>
+				<button class="button">Top results</button>
+			</div>
 		</div>
 		<div class="info">
-
+			<div class="time">00:00:00</div>
+			<div class="moves">Moves: 0</div>
 		</div>
 		<div class="field">
 			
+		</div>
+		<div class="footer">
+			<div class="sizes">
+				<span>Size:</span>
+				<input type="radio" name="size" id="3-3" value="3">
+				<label for="3-3">3x3</label>
+				<input type="radio" name="size" id="4-4" value="4" checked>
+				<label for="4-4">4x4</label>
+				<input type="radio" name="size" id="5-5" value="5">
+				<label for="5-5">5x5</label>
+				<input type="radio" name="size" id="6-6" value="6">
+				<label for="6-6">6x6</label>
+				<input type="radio" name="size" id="7-7" value="7">
+				<label for="7-7">7x7</label>
+				<input type="radio" name="size" id="8-8" value="8">
+				<label for="8-8">8x8</label>
+			</div>
 		</div>
 	</div>
 	<script src="script.js"></script>

@@ -1,33 +1,71 @@
 const field = document.querySelector('.field');
+const sizes = document.querySelectorAll('input');
+const start = document.querySelector('.start');
+const time = document.querySelector('.time');
+const moves = document.querySelector('.moves');
+const pause = document.querySelector('.pause');
+const save = document.querySelector('.save');
 let fieldSize = 4;
-
-const dominoNull = {
-	positionLeft: fieldSize - 1,
-	positionTop: fieldSize - 1,
-	number: 0
-};
-let dominoSize = field.clientWidth / fieldSize;
-const numbers = [];
+const dominoNull = {};
+let dominoSize = 0;
+let numbers = [];
 let dominos = [];
 let isReady = true;
-for (let i = 1; i < fieldSize * fieldSize; i++) {
- 	numbers.push(i);
-}
+let isPaused = false;
+let currentMoves = 0;
+let timer = null;
+let pausedTime = 0;
 
-initGame();
-canSolve();
 
 window.addEventListener('resize', () => {
-	field.innerHTML='';
-	dominoSize = field.clientWidth / fieldSize;
 	initGame();
 });
+
+sizes.forEach(value => {
+	value.addEventListener('change', () => {
+		if (value.checked === true) {
+			fieldSize = value.value;
+			initGame();
+		}
+	});
+});
+
+start.addEventListener('click', () => {
+	initGame();
+});
+
+pause.addEventListener('click', () => {
+	if (isPaused) {
+		resumeCountSec();
+	} else {
+		stopCountSec();
+	}
+});
+
 
 function sortNumbers(arr) {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
 function initGame() {
+	pause.disabled = false;
+	save.disabled = false;
+	field.innerHTML = '';
+	dominoNull.positionLeft = fieldSize - 1;
+	dominoNull.positionTop = fieldSize - 1;
+	dominoNull.number = 0;
+	dominoSize = field.clientWidth / fieldSize;
+	dominos = [];
+	numbers = [];
+	currentMoves = 0;
+	moves.textContent = `Moves: ${currentMoves}`;
+	time.textContent = '00:00:00';
+	clearTimeout(timer);
+	timer = null;
+	countSec(0, 0, 0);
+	for (let i = 1; i < fieldSize * fieldSize; i++) {
+		 numbers.push(i);
+	}
 	sortNumbers(numbers);
 	for (let i = 0; i < fieldSize * fieldSize - 1; i++) {
 		const domino = document.createElement('div');
@@ -42,29 +80,10 @@ function initGame() {
 		domino.className = 'domino';
 		domino.style.width = dominoSize + 'px';
 		domino.style.height = dominoSize + 'px';
-	
+		domino.style.fontSize = scaleText(fieldSize);
 		domino.style.left = positionLeft * dominoSize + 'px';
 		domino.style.top = positionTop * dominoSize + 'px';
-		switch (fieldSize) {
-			case 3:
-				domino.style.fontSize = '48px';
-				break;
-			case 4:
-				domino.style.fontSize = '35px';
-				break;
-			case 5:
-				domino.style.fontSize = '30px';
-				break;	
-			case 6:
-				domino.style.fontSize = '25px';
-				break;	
-			case 7:
-				domino.style.fontSize = '22px';
-				break;
-			case 8:
-				domino.style.fontSize = '20px';
-				break;	
-		}
+		
 		domino.textContent = numbers[i];
 
 		domino.addEventListener('click', () => moveDominos(i));
@@ -72,6 +91,7 @@ function initGame() {
 		field.append(domino);
 	}
 	dominos.push(dominoNull);
+	canSolve();
 }
 
 function moveDominos(index) {
@@ -88,8 +108,10 @@ function moveDominos(index) {
 			dominos[index].positionLeft = currentLeft;
 			dominos[index].element.style.top = currentTop * dominoSize + 'px';
 			dominos[index].element.style.left = currentLeft * dominoSize + 'px';
+			currentMoves++;
+			moves.textContent = `Moves: ${currentMoves}`;
 			if (isWictory()) {
-				setTimeout(() => alert('WIN!!1'), 500);
+				setTimeout(() => alert(`You win game in ${time.textContent} and ${currentMoves} moves!`), 500);
 			};
 			
 		}
@@ -109,7 +131,7 @@ function isWictory() {
 }
 
 function canSolve() {
-	let count = fieldSize;
+	let count = +fieldSize;
 	const result = dominos.slice();
 	result.sort((a, b) => a.positionTop + a.positionLeft - b.positionTop - b.positionLeft).sort((a, b) => a.positionTop - b.positionTop);
 	
@@ -118,12 +140,80 @@ function canSolve() {
 			if (result[i].number > result[j].number) count++;
 		}
 	}
-	
-	if (count % 2 !== 0) {
-		field.innerHTML = '';
-		dominos = [];
-		initGame();
-		canSolve();
+	if (fieldSize %2 === 0) {
+		if (count % 2 !== 0) {
+			
+			
+			initGame();
+			canSolve();
+		}
+	} else {
+		if (count % 2 === 0) {
+			
+			
+			initGame();
+			canSolve();
+		}
 	}
-	
 } 
+
+function scaleText(size) {
+	switch (size) {
+		case '3':
+			return '48px';
+			
+		case '4':
+			return '35px';
+			
+		case '5':
+			return '30px';
+			
+		case '6':
+			return '25px';
+				
+		case '7':
+			return '22px';
+			
+		case '8':
+			return '20px';	
+		default:
+			return '35px';
+	}
+}
+
+function countSec(sec = 0, min = 0, hour = 0) {
+	let seconds = sec;
+	let minutes = min;
+	let hours = hour;
+	
+	seconds++
+	if (seconds === 60) {
+		seconds = 0;
+		minutes++;
+	}
+	if (minutes === 60) {
+		minutes = 0;
+		hours++;
+	}
+	timer = setTimeout(() => {countSec(seconds, minutes, hours)}, 1000);
+	result = `${(''+hours).padStart(2, '0')}:${(''+minutes).padStart(2, '0')}:${(''+seconds).padStart(2, '0')}`;
+	time.textContent = result;
+	
+}
+
+function stopCountSec() {
+	clearTimeout(timer);
+	let hours = +time.textContent.slice(0, 2);
+	let minutes = +time.textContent.slice(3, 5);
+	let seconds = +time.textContent.slice(6);
+	pausedTime = [seconds, minutes, hours];
+	isPaused = true;
+	pause.textContent = 'Resume game';
+	return pausedTime;
+}
+function resumeCountSec() {
+	countSec(...pausedTime);
+	pause.textContent = 'Pause game';
+	isPaused = false;
+}
+
