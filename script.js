@@ -330,7 +330,7 @@ function resumeCountSec() {
 }
 
 function playSound() {
-	const audio = new Audio('/assets/audio/move.mp3');
+	const audio = new Audio('assets/audio/move.mp3');
 	if (!isMute) {
 		audio.play();
 	}
