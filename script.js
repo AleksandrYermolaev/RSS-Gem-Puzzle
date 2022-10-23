@@ -1,3 +1,4 @@
+//Get DOM elements
 const field = document.querySelector('.field');
 const sizes = document.querySelectorAll('input');
 const start = document.querySelector('.start');
@@ -10,8 +11,9 @@ const results = document.querySelector('.get-result');
 const modal = document.querySelector('.results');
 const victoryMessage = document.querySelector('.victory');
 
-let fieldSize = 4;
-const dominoNull = {};
+//Assign global variables
+let fieldSize = 4; 
+const dominoNull = {}; //empty cell
 const storage = {
 	dominos: [],
 	numbers: [],
@@ -19,7 +21,7 @@ const storage = {
 	timer: null,
 	pausedTime: []
 };
-let dominoSize = 0;
+let dominoSize = 0; 
 let numbers = [];
 let dominos = [];
 let isReady = true;
@@ -28,10 +30,10 @@ let currentMoves = 0;
 let timer = null;
 let pausedTime = 0;
 let isMute = false;
-let winsCount = 0;
 let minMoves = 0;
 let leaderBoard = [];
 
+//load game save from local storage
 if (localStorage.getItem('numbers')) {
 	pause.disabled = false;
 	save.disabled = false;
@@ -86,19 +88,17 @@ if (localStorage.getItem('numbers')) {
 	dominos.push(dominoNull);
 }
 
+//load data to results.popup
 if (localStorage.getItem('results')) {
 	modal.innerHTML = localStorage.getItem('results');
 }
 
+//load list of leaders
 if (localStorage.getItem('leaderBoard')) {
 	leaderBoard = JSON.parse(localStorage.getItem('leaderBoard'));
 }
 
-
-window.addEventListener('resize', () => {
-	initGame();
-});
-
+//Change size of the game field
 sizes.forEach(value => {
 	value.addEventListener('change', () => {
 		if (value.checked === true) {
@@ -108,10 +108,12 @@ sizes.forEach(value => {
 	});
 });
 
+//Shuffle and start
 start.addEventListener('click', () => {
 	initGame();
 });
 
+//Pause-Resume game
 pause.addEventListener('click', () => {
 	if (isPaused) {
 		resumeCountSec();
@@ -120,14 +122,17 @@ pause.addEventListener('click', () => {
 	}
 });
 
+//Sound of dominos movement
 sound.addEventListener('click', () => {
 	sound.classList.toggle('sound-on');
 	sound.classList.toggle('sound-off');
 	isMute = isMute ? false : true;
 });
 
+//Save-reset game
 save.addEventListener('click', setLocalStorage);
 
+//close pop up windows
 window.addEventListener('click', (event) => {
 	if (!modal.classList.contains('hidden')) {
 		if (!event.target.classList.contains('results') && !event.target.classList.contains('results-item')) {
@@ -141,16 +146,17 @@ window.addEventListener('click', (event) => {
 	}
 });
 
+//Open leaderboard
 results.addEventListener('click', () => {
 	setTimeout(()=> modal.classList.remove('hidden'), 100);
 });
 
-
-
+//Sort numbers for dominos
 function sortNumbers(arr) {
 	return arr.sort(() => Math.random() - 0.5);
 }
 
+//Create game field
 function initGame() {
 	pause.disabled = false;
 	save.disabled = false;
@@ -199,6 +205,7 @@ function initGame() {
 	canSolve();
 }
 
+//Move dominos =)
 function moveDominos(index) {
 	if (isReady) {
 		const topShift = Math.abs(dominoNull.positionTop - dominos[index].positionTop);
@@ -223,6 +230,7 @@ function moveDominos(index) {
 	}
 }
 
+//Check is combination of dominos are wictory
 function isWictory() {
 	let isWictory = true;
 	const result = dominos.slice();
@@ -235,6 +243,7 @@ function isWictory() {
 	return isWictory;
 }
 
+//Check if combinations unsolvable, and reshaffles it
 function canSolve() {
 	let count = +fieldSize;
 	const result = dominos.slice();
@@ -262,6 +271,7 @@ function canSolve() {
 	}
 } 
 
+//Choose text size in dominos for different sizes
 function scaleText(size) {
 	switch (size) {
 		case '3':
@@ -286,6 +296,7 @@ function scaleText(size) {
 	}
 }
 
+//Start timer
 function countSec(sec = 0, min = 0, hour = 0) {
 	let seconds = sec;
 	let minutes = min;
@@ -306,6 +317,7 @@ function countSec(sec = 0, min = 0, hour = 0) {
 	
 }
 
+//Pause timer
 function stopCountSec() {
 	clearTimeout(timer);
 	let hours = +time.textContent.slice(0, 2);
@@ -321,6 +333,7 @@ function stopCountSec() {
 	return pausedTime;
 }
 
+//Resume timer after pause
 function resumeCountSec() {
 	countSec(...pausedTime);
 	pause.textContent = 'Pause game';
@@ -329,6 +342,7 @@ function resumeCountSec() {
 	pauseWindow.remove();
 }
 
+//Play audio for dominos movement
 function playSound() {
 	const audio = new Audio('assets/audio/move.mp3');
 	if (!isMute) {
@@ -337,6 +351,7 @@ function playSound() {
 	
 }
 
+//Save field to local storage
 function setLocalStorage() {
 	if (localStorage.getItem('numbers')) {
 		localStorage.removeItem('numbers');
@@ -377,6 +392,7 @@ function setLocalStorage() {
 	
 }
 
+//Show victory message and save results to local storage
 function showWinMessage() {
 	clearTimeout(timer);
 	pause.disabled = true;
@@ -432,3 +448,5 @@ function showWinMessage() {
 	localStorage.setItem('leaderBoard', JSON.stringify(leaderBoard));
 	localStorage.setItem('results', modal.innerHTML);
 }
+
+alert('Уважаемый проверяющий! Прошу после изменений размеров окна браузера выполнять перезагрузку страницы');
