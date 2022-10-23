@@ -6,6 +6,8 @@ const moves = document.querySelector('.moves');
 const pause = document.querySelector('.pause');
 const save = document.querySelector('.save');
 const sound = document.querySelector('.sound');
+const results = document.querySelector('.get-result');
+const modal = document.querySelector('.results');
 
 let fieldSize = 4;
 const dominoNull = {};
@@ -25,6 +27,8 @@ let currentMoves = 0;
 let timer = null;
 let pausedTime = 0;
 let isMute = false;
+let winsCount = 0;
+let minMoves = 0;
 
 if (localStorage.getItem('numbers')) {
 	pause.disabled = false;
@@ -115,6 +119,20 @@ sound.addEventListener('click', () => {
 
 save.addEventListener('click', setLocalStorage);
 
+window.addEventListener('click', (event) => {
+	if (!modal.classList.contains('hidden')) {
+		if (!event.target.classList.contains('results') && !event.target.classList.contains('top') && !event.target.classList.contains('results-item')) {
+			modal.classList.add('hidden');
+		}
+	}
+});
+
+results.addEventListener('click', () => {
+	setTimeout(()=> modal.classList.remove('hidden'), 100);
+});
+
+
+
 function sortNumbers(arr) {
 	return arr.sort(() => Math.random() - 0.5);
 }
@@ -138,7 +156,7 @@ function initGame() {
 	for (let i = 1; i < fieldSize * fieldSize; i++) {
 		 numbers.push(i);
 	}
-	sortNumbers(numbers);
+	//sortNumbers(numbers);
 	for (let i = 0; i < fieldSize * fieldSize - 1; i++) {
 		const domino = document.createElement('div');
 		const positionLeft = i % fieldSize;
@@ -184,7 +202,7 @@ function moveDominos(index) {
 			moves.textContent = `Moves: ${currentMoves}`;
 			playSound();
 			if (isWictory()) {
-				setTimeout(() => alert(`You win game in ${time.textContent} and ${currentMoves} moves!`), 500);
+				showWinMessage();
 			};
 			
 		}
@@ -336,4 +354,24 @@ function setLocalStorage() {
 		save.textContent = 'Reset save';
 	}
 	
+}
+
+function showWinMessage() {
+	clearTimeout(timer);
+	pause.disabled = true;
+	save.disabled = true;
+	setTimeout(() => alert(`You win game in ${time.textContent} and ${currentMoves} moves!`), 500);
+	winsCount++;
+	const num = document.createElement('div');
+	num.textContent = winsCount;
+	num.className = 'results-item';
+	modal.append(num);
+	const winTime = document.createElement('div');
+	winTime.textContent = time.textContent;
+	winTime.className = 'results-item times-col';
+	modal.append(winTime);
+	const winMoves = document.createElement('div');
+	winMoves.textContent = currentMoves;
+	winMoves.className = 'results-item moves-col';
+	modal.append(winMoves);
 }
