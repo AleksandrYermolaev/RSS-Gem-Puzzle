@@ -8,6 +8,7 @@ const save = document.querySelector('.save');
 const sound = document.querySelector('.sound');
 const results = document.querySelector('.get-result');
 const modal = document.querySelector('.results');
+const victoryMessage = document.querySelector('.victory');
 
 let fieldSize = 4;
 const dominoNull = {};
@@ -29,6 +30,7 @@ let pausedTime = 0;
 let isMute = false;
 let winsCount = 0;
 let minMoves = 0;
+let leaderBoard = [];
 
 if (localStorage.getItem('numbers')) {
 	pause.disabled = false;
@@ -84,6 +86,13 @@ if (localStorage.getItem('numbers')) {
 	dominos.push(dominoNull);
 }
 
+if (localStorage.getItem('results')) {
+	modal.innerHTML = localStorage.getItem('results');
+}
+
+if (localStorage.getItem('leaderBoard')) {
+	leaderBoard = JSON.parse(localStorage.getItem('leaderBoard'));
+}
 
 
 window.addEventListener('resize', () => {
@@ -121,8 +130,13 @@ save.addEventListener('click', setLocalStorage);
 
 window.addEventListener('click', (event) => {
 	if (!modal.classList.contains('hidden')) {
-		if (!event.target.classList.contains('results') && !event.target.classList.contains('top') && !event.target.classList.contains('results-item')) {
+		if (!event.target.classList.contains('results') && !event.target.classList.contains('results-item')) {
 			modal.classList.add('hidden');
+		}
+	}
+	if (!victoryMessage.classList.contains('hidden')) {
+		if (!event.target.classList.contains('victory')) {
+			victoryMessage.classList.add('hidden');
 		}
 	}
 });
@@ -140,6 +154,7 @@ function sortNumbers(arr) {
 function initGame() {
 	pause.disabled = false;
 	save.disabled = false;
+	isReady = true;
 	field.innerHTML = '';
 	dominoNull.positionLeft = fieldSize - 1;
 	dominoNull.positionTop = fieldSize - 1;
@@ -156,7 +171,7 @@ function initGame() {
 	for (let i = 1; i < fieldSize * fieldSize; i++) {
 		 numbers.push(i);
 	}
-	//sortNumbers(numbers);
+	sortNumbers(numbers);
 	for (let i = 0; i < fieldSize * fieldSize - 1; i++) {
 		const domino = document.createElement('div');
 		const positionLeft = i % fieldSize;
@@ -204,7 +219,6 @@ function moveDominos(index) {
 			if (isWictory()) {
 				showWinMessage();
 			};
-			
 		}
 	}
 }
@@ -325,7 +339,14 @@ function playSound() {
 
 function setLocalStorage() {
 	if (localStorage.getItem('numbers')) {
-		localStorage.clear();
+		localStorage.removeItem('numbers');
+		localStorage.removeItem('lefts');
+		localStorage.removeItem('tops');
+		localStorage.removeItem('nullLeft');
+		localStorage.removeItem('nullTop');
+		localStorage.removeItem('size');
+		localStorage.removeItem('currentMoves');
+		localStorage.removeItem('currentTime');
 		save.textContent = 'Save game';
 	} else {
 		const positionsLeft = [];
@@ -360,18 +381,54 @@ function showWinMessage() {
 	clearTimeout(timer);
 	pause.disabled = true;
 	save.disabled = true;
-	setTimeout(() => alert(`You win game in ${time.textContent} and ${currentMoves} moves!`), 500);
-	winsCount++;
-	const num = document.createElement('div');
-	num.textContent = winsCount;
-	num.className = 'results-item';
-	modal.append(num);
-	const winTime = document.createElement('div');
-	winTime.textContent = time.textContent;
-	winTime.className = 'results-item times-col';
-	modal.append(winTime);
-	const winMoves = document.createElement('div');
-	winMoves.textContent = currentMoves;
-	winMoves.className = 'results-item moves-col';
-	modal.append(winMoves);
+	victoryMessage.innerHTML = '';
+	victoryMessage.textContent = `Hooray! You solved the puzzle in ${time.textContent} and ${currentMoves} moves!`;
+	setTimeout(() => {
+		victoryMessage.classList.remove('hidden');
+		isReady = false;
+	}, 501);
+	
+	const currentResult = {
+		size: fieldSize,
+		time: time.textContent,
+		moves: currentMoves
+	};
+	let number = 1;
+	leaderBoard.push(currentResult);
+	leaderBoard.sort((a, b) => a.moves - b.moves);
+	if (leaderBoard.length > 10) {
+		leaderBoard = leaderBoard.slice(0, 10);
+	}
+	modal.innerHTML = '<div class="section"> <div class="results-item">#</div> <div class="results-item">Size</div> <div class="results-item">Time</div> <div class="results-item">Moves</div> </div>';
+	leaderBoard.forEach(value => {
+		const section = document.createElement('div');
+		section.className = 'section';
+
+		const position = document.createElement('div');
+		position.textContent = number;
+		position.className = 'results-item';
+		section.append(position);
+
+		const winSize = document.createElement('div');
+		winSize.textContent = value.size;
+		winSize.className = 'results-item';
+		section.append(winSize);
+
+		const winTime = document.createElement('div');
+		winTime.textContent = value.time;
+		winTime.className = 'results-item';
+		section.append(winTime);
+
+		const winMoves = document.createElement('div');
+		winMoves.textContent = value.moves;
+		winMoves.className = 'results-item';
+		section.append(winMoves);
+
+		modal.append(section);
+
+		number++;
+	});
+	
+	localStorage.setItem('leaderBoard', JSON.stringify(leaderBoard));
+	localStorage.setItem('results', modal.innerHTML);
 }

@@ -1,7 +1,10 @@
+body {
+  background: url("/assets/images/body-background.jpg") no-repeat center center/cover fixed;
+}
+
 .wrapper {
   position: relative;
-  border: 1px solid black;
-  width: 600px;
+  width: 700px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -9,7 +12,7 @@
 }
 @media (max-width: 1600px) {
   .wrapper {
-    width: calc(300px + 300 * ((100vw - 320px) / (1600 - 320)));
+    width: calc(300px + 400 * ((100vw - 320px) / (1600 - 320)));
   }
 }
 .wrapper .hidden {
@@ -30,7 +33,7 @@
   font-size: 22px;
   text-align: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-content: flex-start;
   flex-wrap: wrap;
   row-gap: 20px;
@@ -41,11 +44,36 @@
     font-size: calc(14px + 8 * ((100vw - 320px) / (1600 - 320)));
   }
 }
-.wrapper .results .top {
+.wrapper .results .section {
   flex: 0 0 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.wrapper .results .results-item {
-  flex: 0 0 33%;
+.wrapper .results .section .results-item {
+  flex: 0 0 25%;
+}
+.wrapper .victory {
+  position: absolute;
+  top: 40%;
+  z-index: 4;
+  width: 80%;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.877);
+  padding: 20px;
+  color: wheat;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 28px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  transition: all 0.5s;
+}
+@media (max-width: 1600px) {
+  .wrapper .victory {
+    font-size: calc(16px + 12 * ((100vw - 320px) / (1600 - 320)));
+  }
 }
 .wrapper .controls {
   width: 100%;
@@ -54,7 +82,7 @@
   align-items: center;
 }
 .wrapper .controls .header {
-  margin: 4% 0;
+  margin: 2% 0;
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 32px;
 }
@@ -138,12 +166,12 @@
 }
 @media (max-width: 1600px) {
   .wrapper .info .sound-on {
-    width: calc(15px + 15 * ((100vw - 320px) / (1600 - 320)));
+    width: calc(20px + 10 * ((100vw - 320px) / (1600 - 320)));
   }
 }
 @media (max-width: 1600px) {
   .wrapper .info .sound-on {
-    height: calc(15px + 15 * ((100vw - 320px) / (1600 - 320)));
+    height: calc(20px + 10 * ((100vw - 320px) / (1600 - 320)));
   }
 }
 .wrapper .info .sound-off {
@@ -154,12 +182,12 @@
 }
 @media (max-width: 1600px) {
   .wrapper .info .sound-off {
-    width: calc(15px + 15 * ((100vw - 320px) / (1600 - 320)));
+    width: calc(20px + 10 * ((100vw - 320px) / (1600 - 320)));
   }
 }
 @media (max-width: 1600px) {
   .wrapper .info .sound-off {
-    height: calc(15px + 15 * ((100vw - 320px) / (1600 - 320)));
+    height: calc(20px + 10 * ((100vw - 320px) / (1600 - 320)));
   }
 }
 .wrapper .field {

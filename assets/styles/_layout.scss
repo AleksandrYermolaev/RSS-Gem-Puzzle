@@ -1,7 +1,11 @@
+body {
+	background: url('/assets/images/body-background.jpg') no-repeat center center/cover fixed;
+}
+
+
 .wrapper {
 	position: relative;
-	border: 1px solid black;
-	@include go-adaptive('width', 600, 300);
+	@include go-adaptive('width', 700, 300);
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
@@ -26,23 +30,41 @@
 		@include go-adaptive('font-size', 22, 14);
 		text-align: center;
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		align-content: flex-start;
 		flex-wrap: wrap;
 		row-gap: 20px;
 		transition: all 0.5s;
-		
 
-		.top {
+		.section {
 			flex: 0 0 100%;
-		}
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-		.results-item {
-			flex: 0 0 33%;
-		}
-		
+			.results-item {
+				flex: 0 0 25%;
+			}
+		}	
+	}
 
+	.victory {
+		position: absolute;
+		top: 40%;
+		z-index: 4;
+		width: 80%;
 		
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.877);
+		padding: 20px;
+		color: wheat;
+		font-family: $font;
+		@include go-adaptive('font-size', 28, 16);
+		display: flex;
+		text-align: center;
+		justify-content: center;
+		align-content: center;
+		transition: all 0.5s;
 	}
 
 	.controls {
@@ -52,7 +74,7 @@
 		align-items: center;
 
 		.header {
-			margin: 4% 0;
+			margin: 2% 0;
 			font-family: $font;
 			@include go-adaptive('font-size', 32, 24);
 		}
@@ -109,14 +131,14 @@
 		@include go-adaptive('font-size', 24, 16);
 		
 		.sound-on {
-			@include go-adaptive('width', 30, 15);
-			@include go-adaptive('height', 30, 15);
+			@include go-adaptive('width', 30, 20);
+			@include go-adaptive('height', 30, 20);
 			background: url('/assets/icons/soundon.svg') center no-repeat;
 			cursor: pointer;
 		}
 		.sound-off {
-			@include go-adaptive('width', 30, 15);
-			@include go-adaptive('height', 30, 15);
+			@include go-adaptive('width', 30, 20);
+			@include go-adaptive('height', 30, 20);
 			background: url('/assets/icons/soundoff.svg') center no-repeat;
 			cursor: pointer;
 		}
