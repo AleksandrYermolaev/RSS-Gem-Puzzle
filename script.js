@@ -5,8 +5,17 @@ const time = document.querySelector('.time');
 const moves = document.querySelector('.moves');
 const pause = document.querySelector('.pause');
 const save = document.querySelector('.save');
+const sound = document.querySelector('.sound');
+
 let fieldSize = 4;
 const dominoNull = {};
+const storage = {
+	dominos: [],
+	numbers: [],
+	currentMoves: 0,
+	timer: null,
+	pausedTime: []
+};
 let dominoSize = 0;
 let numbers = [];
 let dominos = [];
@@ -15,7 +24,7 @@ let isPaused = false;
 let currentMoves = 0;
 let timer = null;
 let pausedTime = 0;
-
+let isMute = false;
 
 window.addEventListener('resize', () => {
 	initGame();
@@ -42,6 +51,13 @@ pause.addEventListener('click', () => {
 	}
 });
 
+sound.addEventListener('click', () => {
+	sound.classList.toggle('sound-on');
+	sound.classList.toggle('sound-off');
+	isMute = isMute ? false : true;
+});
+
+save.addEventListener('click', setLocalStorage);
 
 function sortNumbers(arr) {
 	return arr.sort(() => Math.random() - 0.5);
@@ -110,6 +126,7 @@ function moveDominos(index) {
 			dominos[index].element.style.left = currentLeft * dominoSize + 'px';
 			currentMoves++;
 			moves.textContent = `Moves: ${currentMoves}`;
+			playSound();
 			if (isWictory()) {
 				setTimeout(() => alert(`You win game in ${time.textContent} and ${currentMoves} moves!`), 500);
 			};
@@ -209,11 +226,33 @@ function stopCountSec() {
 	pausedTime = [seconds, minutes, hours];
 	isPaused = true;
 	pause.textContent = 'Resume game';
+	const pauseWindow = document.createElement('div');
+	pauseWindow.textContent = 'Game paused';
+	pauseWindow.className = 'pause-window';
+	field.append(pauseWindow);
 	return pausedTime;
 }
+
 function resumeCountSec() {
 	countSec(...pausedTime);
 	pause.textContent = 'Pause game';
 	isPaused = false;
+	pauseWindow = document.querySelector('.pause-window');
+	pauseWindow.remove();
 }
 
+function playSound() {
+	const audio = new Audio('/assets/audio/move.mp3');
+	if (!isMute) {
+		audio.play();
+	}
+	
+}
+
+function setLocalStorage() {
+	localStorage.setItem('dominos', dominos);
+	localStorage.setItem('numbers', numbers);
+	localStorage.setItem('currentMoves', currentMoves);
+	localStorage.setItem('timer', timer);
+	localStorage.setItem('currentTime', time.textContent);
+}

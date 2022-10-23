@@ -65,9 +65,22 @@
 		margin-bottom: 2%;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		@include go-adaptive('width', 400, 280);
 		@include go-adaptive('font-size', 24, 16);
 		
+		.sound-on {
+			@include go-adaptive('width', 30, 15);
+			@include go-adaptive('height', 30, 15);
+			background: url('/assets/icons/soundon.svg') center no-repeat;
+			cursor: pointer;
+		}
+		.sound-off {
+			@include go-adaptive('width', 30, 15);
+			@include go-adaptive('height', 30, 15);
+			background: url('/assets/icons/soundoff.svg') center no-repeat;
+			cursor: pointer;
+		}
 	}
 	
 	.field {
@@ -79,6 +92,19 @@
 		
 		border-radius: 10px;
 		background: url('/assets/images/background-min.jpg') center/100%;
+
+		.pause-window {
+			position: absolute;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: $font;
+			@include go-adaptive('font-size', 32, 24);
+			background: url('/assets/images/background-min.jpg') center/100%;
+		}
 
 		.domino {
 			position: absolute;
