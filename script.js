@@ -26,6 +26,62 @@ let timer = null;
 let pausedTime = 0;
 let isMute = false;
 
+if (localStorage.getItem('numbers')) {
+	pause.disabled = false;
+	save.disabled = false;
+	save.textContent = 'Reset save';
+	field.innerHTML = '';
+	fieldSize = +localStorage.getItem('size');
+	sizes.forEach(value => {
+		if (value.value === '' + fieldSize) {
+			value.checked = true;
+		}
+	});
+	numbers = JSON.parse(localStorage.getItem('numbers'));
+	const lefts = JSON.parse(localStorage.getItem('lefts'));
+	const tops = JSON.parse(localStorage.getItem('tops'));
+	dominoSize = field.clientWidth / fieldSize;
+	currentMoves = localStorage.getItem('currentMoves');
+	moves.textContent = `Moves: ${currentMoves}`;
+	time.textContent = localStorage.getItem('currentTime');
+	clearTimeout(timer);
+	timer = null;
+	const sec = +localStorage.getItem('currentTime').slice(6);
+	const min = +localStorage.getItem('currentTime').slice(3, 5);
+	const hours = +localStorage.getItem('currentTime').slice(0, 2);
+	countSec(sec, min, hours);
+	
+	for (let i = 0; i < fieldSize * fieldSize - 1; i++) {
+		const domino = document.createElement('div');
+		const positionLeft = lefts[i];
+		const positionTop = tops[i]; 
+		dominos.push({
+			positionLeft: positionLeft,
+			positionTop: positionTop,
+			number: numbers[i],
+			element: domino
+		});
+		domino.className = 'domino';
+		domino.style.width = dominoSize + 'px';
+		domino.style.height = dominoSize + 'px';
+		domino.style.fontSize = scaleText(''+fieldSize);
+		domino.style.left = positionLeft * dominoSize + 'px';
+		domino.style.top = positionTop * dominoSize + 'px';
+		
+		domino.textContent = numbers[i];
+
+		domino.addEventListener('click', () => moveDominos(i));
+		domino.addEventListener('transitionend', () => isReady = true);
+		field.append(domino);
+	}
+	dominoNull.positionLeft = +localStorage.getItem('nullLeft');
+	dominoNull.positionTop = +localStorage.getItem('nullTop');
+	dominoNull.number = 0;
+	dominos.push(dominoNull);
+}
+
+
+
 window.addEventListener('resize', () => {
 	initGame();
 });
@@ -250,9 +306,34 @@ function playSound() {
 }
 
 function setLocalStorage() {
-	localStorage.setItem('dominos', dominos);
-	localStorage.setItem('numbers', numbers);
-	localStorage.setItem('currentMoves', currentMoves);
-	localStorage.setItem('timer', timer);
-	localStorage.setItem('currentTime', time.textContent);
+	if (localStorage.getItem('numbers')) {
+		localStorage.clear();
+		save.textContent = 'Save game';
+	} else {
+		const positionsLeft = [];
+		const positionsTop = [];
+		const numOreder = [];
+		let nullLeft = 0;
+		let nullTop = 0;
+		dominos.forEach(value => {
+			if (value.number === 0) {
+				nullLeft = value.positionLeft;
+				nullTop = value.positionTop;
+			}
+			positionsLeft.push(value.positionLeft);
+			positionsTop.push(value.positionTop);
+			numOreder.push(value.number);
+		});
+	
+		localStorage.setItem('numbers', JSON.stringify(numOreder));
+		localStorage.setItem('lefts', JSON.stringify(positionsLeft));
+		localStorage.setItem('tops', JSON.stringify(positionsTop));
+		localStorage.setItem('nullLeft', nullLeft);
+		localStorage.setItem('nullTop', nullTop);
+		localStorage.setItem('size', fieldSize);
+		localStorage.setItem('currentMoves', currentMoves);
+		localStorage.setItem('currentTime', time.textContent);
+		save.textContent = 'Reset save';
+	}
+	
 }
