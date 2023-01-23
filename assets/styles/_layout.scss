@@ -1,0 +1,219 @@
+body {
+	background: url('assets/images/body-background.jpg') no-repeat center center/cover fixed;
+}
+
+
+.wrapper {
+	position: relative;
+	@include go-adaptive('width', 700, 300);
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.hidden {
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	.results {
+		position: absolute;
+		top: 10%;
+		z-index: 3;
+		width: 60%;
+		min-height: 30%;
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.877);
+		padding: 20px;
+		color: wheat;
+		font-family: $font;
+		@include go-adaptive('font-size', 22, 14);
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-content: flex-start;
+		flex-wrap: wrap;
+		row-gap: 20px;
+		transition: all 0.5s;
+
+		.section {
+			flex: 0 0 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.results-item {
+				flex: 0 0 25%;
+			}
+		}	
+	}
+
+	.victory {
+		position: absolute;
+		top: 40%;
+		z-index: 4;
+		width: 80%;
+		
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.877);
+		padding: 20px;
+		color: wheat;
+		font-family: $font;
+		@include go-adaptive('font-size', 28, 16);
+		display: flex;
+		text-align: center;
+		justify-content: center;
+		align-content: center;
+		transition: all 0.5s;
+	}
+
+	.controls {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.header {
+			margin: 2% 0;
+			font-family: $font;
+			@include go-adaptive('font-size', 32, 24);
+		}
+		.buttons {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-bottom: 3%;
+
+			.button {
+				font-family: $font;
+				@include go-adaptive('font-size', 20, 12);
+				padding: 5px 10px;
+				border: 1px solid $color-domino-border;
+				border-radius: 3px;
+				background-color: $color-domino;
+				color: $color-numbers;
+				cursor: pointer;
+				transition: box-shadow 0.3s;
+
+				&:hover {
+					box-shadow: 2px 2px 5px $color-domino, -2px -2px 5px $color-domino;
+				}
+				&:active {
+					background-color: $color-numbers;
+					color: $color-domino;
+				}
+				&:disabled {
+					cursor: auto;
+					background-color: rgb(172, 157, 108);
+					&:hover {
+						box-shadow: none;
+					}
+					&:active {
+						background-color: rgb(172, 157, 108);
+						color: $color-numbers;
+					}
+				}
+			}
+
+			.pause {
+				@include go-adaptive('width', 146, 100);
+			}
+		}
+	}
+
+	.info {
+		margin-bottom: 2%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		@include go-adaptive('width', 400, 280);
+		@include go-adaptive('font-size', 24, 16);
+		
+		.sound-on {
+			@include go-adaptive('width', 30, 20);
+			@include go-adaptive('height', 30, 20);
+			background: url('assets/icons/soundon.svg') center no-repeat;
+			cursor: pointer;
+		}
+		.sound-off {
+			@include go-adaptive('width', 30, 20);
+			@include go-adaptive('height', 30, 20);
+			background: url('assets/icons/soundoff.svg') center no-repeat;
+			cursor: pointer;
+		}
+	}
+	
+	.field {
+		position: relative;
+		@include go-adaptive('width', 400, 280);
+		@include go-adaptive('height', 400, 280);
+		border: 10px solid;
+		border-image: url('assets/images/border-image-min.jpg') 700;
+		
+		border-radius: 10px;
+		background: url('assets/images/background-min.jpg') center/100%;
+
+		.pause-window {
+			position: absolute;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: $font;
+			@include go-adaptive('font-size', 32, 24);
+			background: url('assets/images/background-min.jpg') center/100%;
+		}
+
+		.domino {
+			position: absolute;
+			box-sizing: border-box;	
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-shadow: 2px 2px 2px rgb(224, 153, 22) inset, 1px 1px 3px gray;
+			border: 2px solid $color-domino-border;
+			border-radius: 10px;
+			background-color: $color-domino;
+			font-family: $font;
+			
+			color: $color-numbers;
+			cursor: pointer;
+			transition: all 0.3s;
+			
+		}
+	}
+
+	.footer {
+		width: 100%;
+		margin: 3% 0 0 0;
+		.sizes {
+			display: flex;
+			justify-content: center;
+			gap: 15px;
+			@include go-adaptive('font-size', 24, 16);
+
+			span {
+				font-weight: 700;
+			}
+
+			input {
+				display: none;
+				&:checked {
+					+label {
+						color: rgb(13, 56, 136);
+						text-shadow: 1px 1px 4px rgb(32, 89, 194, 0.7), -1px -1px 4px rgb(32, 89, 194, 0.7);
+						text-decoration: underline;
+						transform: scale(1.2);
+					}
+				}
+			}
+			label {
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+		}
+	}
+}
